@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block page_title %}Learn. Support. Share.{% endblock %}
+{% block body %}
+{{ super() }}
+<p class="lead">A centralized website to push for change.</p>
+<p class="lead">POSTS AWAITING APPROVAL</p>
+
+<div class="row">
+  {% for post in data %}
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.description }}</p>
+        <hr>
+        {% if post.other_1 %}
+        <a href={{ post.other_1 }}>Link 1</a><br>
+        {% endif %}
+        {% if post.other_2 %}
+        <a href={{ post.other_2 }}>Link 2</a><br>
+        {% endif %}
+        <a href={{ post.petition_link }} target="_blank" class="btn btn-outline-success mt-2">Sign petition</a>
+        <a href={{'/approve_post/' +  post.id|string }} class="btn btn-success mt-2">Approve</a>
+        <a href={{'/delete_post/' +  post.id|string }} class="btn btn-danger mt-2">Remove</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

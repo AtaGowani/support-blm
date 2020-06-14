@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block page_title %}Learn. Support. Share.{% endblock %}
+{% block body %}
+{{ super() }}
+<p class="lead">A centralized website to push for change.</p>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-success mb-5" data-toggle="modal" data-target="#exampleModalCenter">
+  Share Action Item
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Share a Petition</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/add_post" method="post">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="petition_title">Petition Title</label>
+            <input type="text" class="form-control" name="petition_title" id="petition_title"
+              aria-describedby="emailHelp" placeholder="Justice for..." required>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="petition_link">Petition URL</label>
+            <input type="url" class="form-control" name="petition_link" id="petition_link"
+              placeholder="http://example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="other_1">Other Link</label>
+            <input type="url" class="form-control" name="other_1" id="other_1" placeholder="http://example.com">
+          </div>
+          <!-- <div class="form-group">
+                        <label for="other_2">Other Link</label>
+                        <textarea class="form-control" id="description" rows="3"></textarea>
+                    </div> -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit for approval</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <h3>Things you can take an action on...</h3>
+  </div>
+  {% for post in data %}
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.description }}</p>
+        <hr>
+        {% if post.other_1 %}
+        <a href={{ post.other_1 }}>Link 1</a><br>
+        {% endif %}
+        {% if post.other_2 %}
+        <a href={{ post.other_2 }}>Link 2</a><br>
+        {% endif %}
+        <a href={{ post.petition_link }} target="_blank" class="btn btn-outline-success mt-2">Take Action</a>
+        {% if session.get("current_user", None) == "ADMIN" %}
+        <a href={{'/delete_post/' +  post.id|string }} target="_blank" class="btn btn-danger mt-2">Remove</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
